@@ -36,9 +36,12 @@ pipeline
 		}
 		stage("build")
 		{
-			script
+			steps
 			{
-				gv.buildApp()
+				script
+				{
+					gv.buildApp()
+				}
 			}
 		}
 		stage("testing")
@@ -50,20 +53,25 @@ pipeline
 					params.executeTests || BRNACH_NAME == 'cicd' || BRANCH_NAME == 'main'
 				}
 			}
-			script
-			{
-				gv.testApp()
-			}
+			
 			steps
 			{
 				sh "mvn clean verify -Dsuite=regression_suite"
+				
+				script
+				{
+					gv.testApp()
+				}
 			}
 		}
 		stage("deploy")
 		{
-			script
+			steps
 			{
-				gv.deployApp()
+				script
+				{
+					gv.deployApp()
+				}
 			}
 		}
 	}
